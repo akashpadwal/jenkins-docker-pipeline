@@ -1,11 +1,4 @@
 pipeline {
-    environment { 
-
-        registry = "devopshint/my-app-1.0" 
-
-        registryCredential = 'devopshint' 
-
-    }
     agent any
     tools {
         maven "MAVEN"
@@ -18,17 +11,12 @@ pipeline {
                 echo "M2_HOME = /opt/maven"
             }
         }
-   stage('Building our image') { 
-
-            steps { 
-
-                script { 
-
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER" 
-
-                }
-
-            } 
+        stage('Build') {
+            steps {
+                dir("/var/lib/jenkins/workspace/jenkins1/") {
+sh "mvn -Dmaven.test.failure.ignore=true clean package"                }
+            }
         }
-    }
+     }
+}
 }
